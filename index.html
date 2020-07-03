@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <nav id="navbar">
+    <header>
+      <h1>MongoDB Documentation</h1>
+    </header>
+    <a href="#Introduction" class="nav-link">Introduction</a>
+    <a href="#Create_Database" class="nav-link">Create Database</a>
+    <a href="#Drop_Database" class="nav-link">Drop Database</a>
+    <a href="#Create_Collection" class="nav-link">Create Collection</a>
+    <a href="#Drop_Collection" class="nav-link">Drop Collection</a>
+    <a href="#Insert_Document" class="nav-link">Insert Document</a>
+    <a href="#Query_Document" class="nav-link">Query Document</a>
+    <a href="#Update_Document" class="nav-link">Update Document</a>
+    <a href="#Delete_Document" class="nav-link">Delete Document</a>
+    <a href="#Projection" class="nav-link">Projection</a>
+  </nav>
+
+  <main id="main-doc">
+    <section class="main-section" id="Introduction">
+      <header>
+        <h1>Introduction</h1>
+      </header>
+      <p>MongoDB is an open-source document database and leading NoSQL database.MongoDB is written in C++.
+        This documentation will give you great understanding on MongoDB concepts needed to create and deploy a highly scalable and performance-oriented database.
+        It is a cross-platform, document oriented database that provides, high performance, high availability, and easy scalability.
+        MongoDB works on concept of collection and document.</p>
+
+      <h3>Why Use MongoDB?</h3>
+      <li>Document Oriented Storage − Data is stored in the form of JSON style documents.</li>
+      <li>Index on any attribute</li>
+      <li>Replication and high availability</li>
+      <li>Auto-Sharding</li>
+      <li>Rich queries</li>
+      <li>Fast in-place updates</li>
+      <li>Professional support by MongoDB</li>
+    </section>
+
+    <section class="main-section" id="Create_Database">
+      <header>
+        <h1>Create Database</h1>
+      </header>
+      <p>In this, we will see how to create a database in MongoDB.</p>
+      <h3>The use Command</h3>
+      <p>MongoDB use DATABASE_NAME is used to create database.
+        The command will create a new database if it doesn't exist, otherwise it will return the existing database.</p>
+      <h4>Syntax</h4>
+      <p>Basic syntax of use DATABASE statement is as follows −</p>
+      <code>use DATABASE_NAME</code>
+      <h4>Example</h4>
+      <p>If you want to use a database with name <mydb>, then use DATABASE statement would be as follows −</p>
+      <code>>use mydb
+        switched to db mydb</code>
+      <p>To check your currently selected database, use the command db</p>
+      <code>>db <br>
+        mydb</code>
+      <p>If you want to check your databases list, use the command show dbs.</p>
+      <code>>show dbs <br>
+        local 0.78125GB <br>
+        test 0.23012GB</code>
+      <p>Your created database (mydb) is not present in list. To display database, you need to insert at least one document into it.</p>
+      <code>>db.movie.insert({"name":"tutorials point"}) <br>
+        >show dbs <br>
+        local 0.78125GB <br>
+        mydb 0.23012GB <br>
+        test 0.23012GB</code>
+      <p>In MongoDB default database is test. If you didn't create any database, then collections will be stored in test database.</p>
+    </section>
+
+    <section class="main-section" id="Drop_Database">
+      <header>
+        <h1>Drop Database</h1>
+      </header>
+      <p>In this chapter, we will see how to drop a database using MongoDB command.</p>
+      <h3>The dropDatabase() Method</h3>
+      <p>MongoDB db.dropDatabase() command is used to drop a existing database.</p>
+      <h4>Syntax</h4>
+      <p>Basic syntax of dropDatabase() command is as follows −</p>
+      <code>db.dropDatabase()</code>
+      <p>This will delete the selected database. If you have not selected any database, then it will delete default 'test' database.</p>
+      <h4>Example</h4>
+      <p>First, check the list of available databases by using the command, show dbs.</p>
+      <code>>show dbs <br>
+        local 0.78125GB <br>
+        mydb 0.23012GB <br>
+        test 0.23012GB <br>
+        ></code>
+      <p>If you want to delete new database <mydb>, then dropDatabase() command would be as follows −</p>
+      <code>>use mydb <br>
+        switched to db mydb <br>
+        >db.dropDatabase() <br>
+        >{ "dropped" : "mydb", "ok" : 1 } <br>
+        ></code>
+      <p>Now check list of databases.</p>
+      <code>>show dbs <br>
+        local 0.78125GB <br>
+        test 0.23012GB <br>
+        ></code>
+    </section>
+
+    <section class="main-section" id="Create_Collection">
+      <header>
+        <h1>Create Collection</h1>
+      </header>
+      <p>In this, we will see how to create a Collection in MongoDB.</p>
+      <h3>The createCollection() Method</h3>
+      <p>MongoDB db.createCollection(name, options) is used to create collection.</p>
+
+      <h4>Syntax</h4>
+      <p>Basic syntax of createCollection() command is as follows −</p>
+      <code>db.createCollection(name, options)</code>
+      <p>In the command, name is name of collection to be created.
+        Options is a document and is used to specify configuration of collection.</p>
+      <p>Options parameter is optional, so you need to specify only the name of the collection.</p>
+      <p>While inserting the document, MongoDB first checks size field of capped collection, then it checks max field.</p>
+      <h4>Examples</h4>
+      <p>Basic syntax of createCollection() method without options is as follows −</p>
+      <code>>>use test <br>
+        switched to db test <br>
+        >db.createCollection("mycollection") <br>
+        { "ok" : 1 } <br>
+        ></code>
+      <p>You can check the created collection by using the command show collections.</p>
+      <code>>show collections <br>
+        mycollection<br>
+        system.indexes</code>
+      <p>The following example shows the syntax of createCollection() method with few important options −</p>
+      <code>> db.createCollection("mycol", { capped : true, autoIndexID : true, size : 6142800, max : 10000 } ){<br>
+        "ok" : 0,<br>
+        "errmsg" : "BSON field 'create.autoIndexID' is an unknown field.",<br>
+        "code" : 40415,<br>
+        "codeName" : "Location40415"<br>
+        }<br>
+        ></code>
+      <p>In MongoDB, you don't need to create collection. MongoDB creates collection automatically, when you insert some document.</p>
+      <code>>>db.tutorialspoint.insert({"name" : "tutorialspoint"}),<br>
+        WriteResult({ "nInserted" : 1 })<br>
+        >show collections<br>
+        mycol<br>
+        mycollection<br>
+        system.indexes<br>
+        tutorialspoint<br>
+        ></code>
+    </section>
+
+    <section class="main-section" id="Drop_Collection">
+      <header>
+        <h1>Drop Collection</h1>
+      </header>
+      <p>In this, we will see how to drop a collection using MongoDB.</p>
+      <h3>The drop() Method</h3>
+      <p>MongoDB's db.collection.drop() is used to drop a collection from the database.</p>
+      <h4>Syntax</h4>
+      <p>Basic syntax of drop() command is as follows −</p>
+      <code>db.COLLECTION_NAME.drop()</code>
+      <h4>Example</h4>
+      <p>First, check the available collections into your database mydb.</p>
+      <code>>use mydb<br>
+        switched to db mydb<br>
+        >show collections<br>
+        mycol<br>
+        mycollection<br>
+        system.indexes<br>
+        tutorialspoint<br>
+        ></code>
+      <p>Now drop the collection with the name mycollection.</p>
+      <code>>db.mycollection.drop()<br>
+        true<br>
+        ></code>
+      <p>Again check the list of collections into database.</p>
+      <code>>show collections <br>
+        mycol<br>
+        system.indexes<br>
+        tutorialspoint<br>
+        ></code>
+      <p>drop() method will return true, if the selected collection is dropped successfully, otherwise it will return false.</p>
+    </section>
+
+    <section class="main-section" id="Insert_Document">
+      <header>
+        <h1>Insert Document</h1>
+      </header>
+      <p>In this , we will learn how to insert document in MongoDB collection.</p>
+      <h3>The insert() Method</h3>
+      <p>To insert data into MongoDB collection, you need to use MongoDB's insert() or save() method.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of insert() command is as follows −</p>
+      <code>>db.COLLECTION_NAME.insert(document)</code>
+      <h4>Example</h4>
+      <code>> db.users.insert({ <br>
+        ... _id : ObjectId("507f191e810c19729de860ea"), <br>
+        ... title: "MongoDB Overview", <br>
+        ... description: "MongoDB is no sql database", <br>
+        ... by: "tutorials point", <br>
+        ... url: "http://www.tutorialspoint.com", <br>
+        ... tags: ['mongodb', 'database', 'NoSQL'], <br>
+        ... likes: 100 <br>
+        ... }) <br>
+        WriteResult({ "nInserted" : 1 }) <br>
+        ></code>
+      <p>Here mycol is our collection name, as created in the previous chapter. If the collection doesn't exist in the database, then MongoDB will create this collection and then insert a document into it.</p>
+      <p>In the inserted document, if we don't specify the _id parameter, then MongoDB assigns a unique ObjectId for this document.</p>
+      <p>_id is 12 bytes hexadecimal number unique for every document in a collection. 12 bytes are divided as follows −</p>
+      <code>_id: ObjectId(4 bytes timestamp, 3 bytes machine id, 2 bytes process id, 3 bytes incrementer)</code>
+      <p>You can also pass an array of documents into the insert() method as shown below:.</p>
+      <code>> db.createCollection("post") <br>
+        > db.post.insert([ <br>
+        { <br>
+        title: "MongoDB Overview", <br>
+        description: "MongoDB is no SQL database", <br>
+        by: "tutorials point", <br>
+        url: "http://www.tutorialspoint.com", <br>
+        tags: ["mongodb", "database", "NoSQL"], <br>
+        likes: 100 <br>
+        }, <br>
+        { <br>
+        title: "NoSQL Database", <br>
+        description: "NoSQL database doesn't have tables", <br>
+        by: "tutorials point", <br>
+        url: "http://www.tutorialspoint.com", <br>
+        tags: ["mongodb", "database", "NoSQL"], <br>
+        likes: 20, <br>
+        comments: [ <br>
+        { <br>
+        user:"user1",
+        message: "My first comment", <br>
+        dateCreated: new Date(2013,11,10,2,35), <br>
+        like: 0 <br>
+        } <br>
+        ] <br>
+        } <br>
+        ]) <br>
+        BulkWriteResult({ <br>
+        "writeErrors" : [ ], <br>
+        "writeConcernErrors" : [ ], <br>
+        "nInserted" : 2, <br>
+        "nUpserted" : 0, <br>
+        "nMatched" : 0, <br>
+        "nModified" : 0, <br>
+        "nRemoved" : 0, <br>
+        "upserted" : [ ] <br>
+        }) <br>
+        ></code>
+      <p>To insert the document you can use db.post.save(document) also. If you don't specify _id in the document then save() method will work same as insert() method. If you specify _id then it will replace whole data of document containing _id as
+        specified in save() method.</p>
+      <h3>The insertOne() method</h3>
+      <p>If you need to insert only one document into a collection you can use this method.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of insert() command is as follows −</p>
+      <code>>db.COLLECTION_NAME.insertOne(document)</code>
+      <h4>Example</h4>
+      <p>Following example creates a new collection named empDetails and inserts a document using the insertOne() method.</p>
+      <code>> db.createCollection("empDetails") <br>
+        { "ok" : 1 }</code>
+      <code>> db.empDetails.insertOne( <br>
+        { <br>
+        First_Name: "Radhika", <br>
+        Last_Name: "Sharma", <br>
+        Date_Of_Birth: "1995-09-26", <br>
+        e_mail: "radhika_sharma.123@gmail.com", <br>
+        phone: "9848022338" <br>
+        }) <br>
+        { <br>
+        "acknowledged" : true, <br>
+        "insertedId" : ObjectId("5dd62b4070fb13eec3963bea") <br>
+        } <br>
+        ></code>
+      <h3>The insertMany() method</h3>
+      <p>You can insert multiple documents using the insertMany() method. To this method you need to pass an array of documents.</p>
+      <h4>Example</h4>
+      <p>Following example inserts three different documents into the empDetails collection using the insertMany() method.</p>
+      <code>> db.empDetails.insertMany( <br> <br>
+        [ <br> <br>
+        { <br> <br>
+        First_Name: "Radhika", <br> <br>
+        Last_Name: "Sharma", <br> <br>
+        Date_Of_Birth: "1995-09-26", <br> <br>
+        e_mail: "radhika_sharma.123@gmail.com", <br> <br>
+        phone: "9000012345" <br> <br>
+        }, <br> <br>
+        { <br> <br>
+        First_Name: "Rachel", <br> <br>
+        Last_Name: "Christopher", <br> <br>
+        Date_Of_Birth: "1990-02-16", <br> <br>
+        e_mail: "Rachel_Christopher.123@gmail.com", <br> <br>
+        phone: "9000054321" <br> <br>
+        }, <br> <br>
+        { <br> <br>
+        First_Name: "Fathima", <br> <br>
+        Last_Name: "Sheik", <br> <br>
+        Date_Of_Birth: "1990-02-16", <br>
+        e_mail: "Fathima_Sheik.123@gmail.com", <br>
+        phone: "9000054321" <br>
+        } <br>
+        ] <br>
+        ) <br>
+        { <br>
+        "acknowledged" : true, <br>
+        "insertedIds" : [ <br>
+        ObjectId("5dd631f270fb13eec3963bed"), <br>
+        ObjectId("5dd631f270fb13eec3963bee"), <br>
+        ObjectId("5dd631f270fb13eec3963bef") <br>
+        ] <br>
+        } <br>
+        <br> ></code>
+    </section>
+
+    <section class="main-section" id="Query_Document">
+      <header>
+        <h1>Query Document</h1>
+      </header>
+      <p>In this , we will learn how to query document from MongoDB collection.</p>
+      <h3>The find() Method</h3>
+      <p>To query data from MongoDB collection, you need to use MongoDB's find() method.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of find() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.find()</code>
+      <p>find() method will display all the documents in a non-structured way.</p>
+      <h4>Example</h4>
+      <p>Assume we have created a collection named mycol as −</p>
+      <code>> use sampleDB <br>
+        switched to db sampleDB <br>
+        > db.createCollection("mycol") <br>
+        { "ok" : 1 } <br>
+        ></code>
+      <p>And inserted 3 documents in it using the insert() method as shown below −</p>
+      <code>> db.mycol.insert([ <br>
+        { <br>
+        title: "MongoDB Overview", <br>
+        description: "MongoDB is no SQL database", <br>
+        by: "tutorials point", <br>
+        url: "http://www.tutorialspoint.com", <br>
+        tags: ["mongodb", "database", "NoSQL"], <br>
+        likes: 100 <br>
+      }, <br>
+        { <br>
+        title: "NoSQL Database", <br>
+        description: "NoSQL database doesn't have tables", <br>
+        by: "tutorials point", <br>
+        url: "http://www.tutorialspoint.com", <br>
+        tags: ["mongodb", "database", "NoSQL"], <br>
+        likes: 20, <br>
+        comments: [ <br>
+        { <br>
+        user:"user1", <br>
+        message: "My first comment", <br>
+        dateCreated: new Date(2013,11,10,2,35), <br>
+        like: 0 <br>
+      } <br>
+        ] <br>
+      } <br>
+        ])</code>
+      <p>Following method retrieves all the documents in the collection −</p>
+      <code>> db.mycol.find() <br>
+        { "_id" : ObjectId("5dd4e2cc0821d3b44607534c"), "title" : "MongoDB Overview", "description" : "MongoDB is no SQL database", "by" : "tutorials point", "url" : "http://www.tutorialspoint.com", "tags" : [ "mongodb", "database", "NoSQL" ], <br>
+        "likes" : 100 } <br>
+        { "_id" : ObjectId("5dd4e2cc0821d3b44607534d"), "title" : "NoSQL Database", "description" : "NoSQL database doesn't have tables", "by" : "tutorials point", "url" : "http://www.tutorialspoint.com", "tags" : [ "mongodb", "database", "NoSQL" ], <br>
+        "likes" : 20, "comments" : [ { "user" : "user1", "message" : "My first comment", "dateCreated" : ISODate("2013-12-09T21:05:00Z"), "like" : 0 } ] } <br>
+        ></code>
+
+      <h3>The pretty() Method</h3>
+      <p>To display the results in a formatted way, you can use pretty() method.</p>
+      <h4>Syntax</h4>
+      <code>>db.COLLECTION_NAME.find().pretty()</code>
+      <h4>Example</h4>
+      <p>Following example retrieves all the documents from the collection named mycol and arranges them in an easy-to-read format.</p>
+      <code>> db.mycol.find().pretty() <br>
+        { <br>
+        "_id" : ObjectId("5dd4e2cc0821d3b44607534c"), <br>
+        "title" : "MongoDB Overview", <br>
+        "description" : "MongoDB is no SQL database", <br>
+        "by" : "tutorials point", <br>
+        "url" : "http://www.tutorialspoint.com", <br>
+        "tags" : [ <br>
+        "mongodb", <br>
+        "database", <br>
+        "NoSQL" <br>
+        ], <br>
+        "likes" : 100 <br>
+      } <br>
+        { <br>
+        "_id" : ObjectId("5dd4e2cc0821d3b44607534d"), <br>
+        "title" : "NoSQL Database", <br>
+        "description" : "NoSQL database doesn't have tables", <br>
+        "by" : "tutorials point", <br>
+        "url" : "http://www.tutorialspoint.com", <br>
+        "tags" : [ <br>
+        "mongodb", <br>
+        "database", <br>
+        "NoSQL" <br>
+        ], <br>
+        "likes" : 20, <br>
+        "comments" : [ <br>
+        { <br>
+        "user" : "user1", <br>
+        "message" : "My first comment", <br>
+        "dateCreated" : ISODate("2013-12-09T21:05:00Z"), <br>
+        "like" : 0 <br>
+      } <br>
+        ] <br>
+        }</code>
+      <h3>The findOne() method</h3>
+      <p>Apart from the find() method, there is findOne() method, that returns only one document.</p>
+      <h4>Syntax</h4>
+      <code>>db.COLLECTIONNAME.findOne()</code>
+      <h4>Example</h4>
+      <p>Following example retrieves the document with title MongoDB Overview.</p>
+      <code>> db.mycol.findOne({title: "MongoDB Overview"}) <br>
+        { <br>
+        "_id" : ObjectId("5dd6542170fb13eec3963bf0"), <br>
+        "title" : "MongoDB Overview", <br>
+        "description" : "MongoDB is no SQL database", <br>
+        "by" : "tutorials point", <br>
+        "url" : "http://www.tutorialspoint.com", <br>
+        "tags" : [ <br>
+        "mongodb", <br>
+        "database", <br>
+        "NoSQL" <br>
+        ], <br>
+        "likes" : 100 <br>
+        }</code>
+    </section>
+
+    <section class="main-section" id="Update_Document">
+      <header>
+        <h1>Update Document</h1>
+      </header>
+      <p>MongoDB's update() and save() methods are used to update document into a collection. The update() method updates the values in the existing document while the save() method replaces the existing document with the document passed in save()
+        method. </p>
+      <h3>MongoDB Update() Method</h3>
+      <p>The update() method updates the values in the existing document.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of update() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)</code>
+      <h4>>db.COLLECTION_NAME.update(SELECTION_CRITERIA, UPDATED_DATA)</h4>
+      <p>Consider the mycol collection has the following data.</p>
+      <code>{ "_id" : ObjectId(5983548781331adf45ec5), "title":"MongoDB Overview"}<br>
+        { "_id" : ObjectId(5983548781331adf45ec6), "title":"NoSQL Overview"}<br>
+        { "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point Overview"}</code>
+      <p>Following example will set the new title 'New MongoDB Tutorial' of the documents whose title is 'MongoDB Overview'.</p>
+      <code>>db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New MongoDB Tutorial'}})<br><br>
+        WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })<br><br>
+        >db.mycol.find()<br><br>
+        { "_id" : ObjectId(5983548781331adf45ec5), "title":"New MongoDB Tutorial"}<br><br>
+        { "_id" : ObjectId(5983548781331adf45ec6), "title":"NoSQL Overview"}<br><br>
+        { "_id" : ObjectId(5983548781331adf45ec7), "title":"Tutorials Point Overview"}<br><br>
+        ></code>
+      <p>By default, MongoDB will update only a single document. To update multiple documents, you need to set a parameter 'multi' to true.</p>
+      <code>>db.mycol.update({'title':'MongoDB Overview'}<br>
+        {$set:{'title':'New MongoDB Tutorial'}},{multi:true})</code>
+      <h3>MongoDB Save() Method</h3>
+      <p>The save() method replaces the existing document with the new document passed in the save() method.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of MongoDB save() method is shown below −</p>
+      <code>>db.COLLECTION_NAME.save({_id:ObjectId(),NEW_DATA})</code>
+      <h4>Example</h4>
+      <p>Following example will replace the document with the _id '5983548781331adf45ec5'.</p>
+      <code>>db.mycol.save(<br>
+        {<br>
+        "_id" : ObjectId("507f191e810c19729de860ea"),<br>
+        "title":"Tutorials Point New Topic",<br>
+        "by":"Tutorials Point"<br>
+        }<br>
+        )<br>
+        WriteResult({<br>
+        "nMatched" : 0,<br>
+        "nUpserted" : 1,<br>
+        "nModified" : 0,<br>
+        "_id" : ObjectId("507f191e810c19729de860ea")<br>
+        })<br>
+        >db.mycol.find()<br>
+        { "_id" : ObjectId("507f191e810c19729de860e6"), "title":"Tutorials Point New Topic",<br>
+        "by":"Tutorials Point"}<br>
+        { "_id" : ObjectId("507f191e810c19729de860e6"), "title":"NoSQL Overview"}<br>
+        { "_id" : ObjectId("507f191e810c19729de860e6"), "title":"Tutorials Point Overview"}<br>
+        ></code>
+
+      <h3>MongoDB findOneAndUpdate() method</h3>
+      <p>The findOneAndUpdate() method updates the values in the existing document.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of findOneAndUpdate() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.findOneAndUpdate(SELECTIOIN_CRITERIA, UPDATED_DATA)</code>
+      <h4>Example</h4>
+      <p>Assume we have created a collection named empDetails and inserted three documents in it as shown below −</p>
+      <code>> db.empDetails.insertMany(<br>
+        [<br>
+        {<br>
+        First_Name: "Radhika",<br>
+        Last_Name: "Sharma",<br>
+        Age: "26",<br>
+        e_mail: "radhika_sharma.123@gmail.com",<br>
+        phone: "9000012345"<br>
+        },<br>
+        {<br>
+        First_Name: "Rachel",<br>
+        Last_Name: "Christopher",<br>
+        Age: "27",<br>
+        e_mail: "Rachel_Christopher.123@gmail.com",<br>
+        phone: "9000054321"<br>
+        },<br>
+        {<br>
+        First_Name: "Fathima",<br>
+        Last_Name: "Sheik",<br>
+        Age: "24",<br>
+        e_mail: "Fathima_Sheik.123@gmail.com",<br>
+        phone: "9000054321"<br>
+        }<br>
+        ]<br>
+        )</code>
+      <p>Following example updates the age and email values of the document with name 'Radhika'.</p>
+      <code>> db.empDetails.findOneAndUpdate(<br>
+        {First_Name: 'Radhika'},<br>
+        { $set: { Age: '30',e_mail: 'radhika_newemail@gmail.com'}}<br>
+        )<br>
+        {<br>
+        "_id" : ObjectId("5dd6636870fb13eec3963bf5"),<br>
+        "First_Name" : "Radhika",<br>
+        "Last_Name" : "Sharma",<br>
+        "Age" : "30",<br>
+        "e_mail" : "radhika_newemail@gmail.com",<br>
+        "phone" : "9000012345"<br>
+        }</code>
+
+      <h3>MongoDB updateOne() method</h3>
+      <p>This methods updates a single document which matches the given filter.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of updateOne() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.updateOne(<filter>, <update>)</code>
+      <p>Example</p>
+      <code>> db.empDetails.updateOne(<br>
+        {First_Name: 'Radhika'},<br>
+        { $set: { Age: '30',e_mail: 'radhika_newemail@gmail.com'}}<br>
+        )<br>
+        { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 0 }<br>
+        ></code>
+
+      <h3>MongoDB updateMany() method</h3>
+      <p>The updateMany() method updates all the documents that matches the given filter.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of updateMany() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.update(<filter>, <update>)</code>
+      <p>Example</p>
+      <code>> db.empDetails.updateMany(<br>
+        {Age:{ $gt: "25" }},<br>
+        { $set: { Age: '00'}}<br>
+        )<br>
+        { "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }</code>
+
+    </section>
+
+    <section class="main-section" id="Delete_Document">
+      <header>
+        <h1>Delete Document</h1>
+      </header>
+      <p>In this, we will learn how to delete a document using MongoDB.</p>
+      <h3>The remove() Method</h3>
+      <p>MongoDB's remove() method is used to remove a document from the collection. remove() method accepts two parameters. One is deletion criteria and second is justOne flag.</p>
+      <ul>
+        <li><strong>deletion criteria</strong> − (Optional) deletion criteria according to documents will be removed.</li>
+        <li><strong>justOne </strong>− (Optional) if set to true or 1, then remove only one document.</li>
+      </ul>
+      <h4>Syntax</h4>
+      <p>Basic syntax of remove() method is as follows −</p>
+      <code>>db.COLLECTION_NAME.remove(DELLETION_CRITTERIA)</code>
+      <h4>Example</h4>
+      <p>Consider the mycol collection has the following data.</p>
+      <code>{_id : ObjectId("507f191e810c19729de860e1"), title: "MongoDB Overview"},<br>
+        {_id : ObjectId("507f191e810c19729de860e2"), title: "NoSQL Overview"},<br>
+        {_id : ObjectId("507f191e810c19729de860e3"), title: "Tutorials Point Overview"}</code>
+      <p>Following example will remove all the documents whose title is 'MongoDB Overview'.</p>
+      <code>>db.mycol.remove({'title':'MongoDB Overview'})<br>
+        WriteResult({"nRemoved" : 1})<br>
+        > db.mycol.find()<br>
+        {"_id" : ObjectId("507f191e810c19729de860e2"), "title" : "NoSQL Overview" }<br>
+        {"_id" : ObjectId("507f191e810c19729de860e3"), "title" : "Tutorials Point Overview" }</code>
+      <h3>Remove Only One</h3>
+      <p>If there are multiple records and you want to delete only the first record, then set justOne parameter in remove() method.</p>
+      <code>>db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)</code>
+      <h3>Remove All Documents</h3>
+      <p>If you don't specify deletion criteria, then MongoDB will delete whole documents from the collection. This is equivalent of SQL's truncate command.</p>
+      <code>> db.mycol.remove({})<br>
+        WriteResult({ "nRemoved" : 2 })<br>
+        > db.mycol.find()<br>
+        ></code>
+    </section>
+
+    <section class="main-section" id="Projection">
+      <header>
+        <h1>Projection</h1>
+      </header>
+      <p>In MongoDB, projection means selecting only the necessary data rather than selecting whole of the data of a document. If a document has 5 fields and you need to show only 3, then select only 3 fields from them.</p>
+      <h3>The find() Method</h3>
+      <p>MongoDB's find() method, explained in MongoDB Query Document accepts second optional parameter that is list of fields that you want to retrieve. In MongoDB, when you execute find() method, then it displays all fields of a document. To limit
+        this, you need to set a list of fields with value 1 or 0. 1 is used to show the field while 0 is used to hide the fields.</p>
+      <h4>Syntax</h4>
+      <p>The basic syntax of find() method with projection is as follows −</p>
+      <code>>db.COLLECTION_NAME.find({},{KEY:1})</code>
+      <h4>Example</h4>
+      <p>Consider the collection mycol has the following data −</p>
+      <code>{_id : ObjectId("507f191e810c19729de860e1"), title: "MongoDB Overview"}, <br>
+        {_id : ObjectId("507f191e810c19729de860e2"), title: "NoSQL Overview"}, <br>
+        {_id : ObjectId("507f191e810c19729de860e3"), title: "Tutorials Point Overview"}</code>
+      <p>Following example will display the title of the document while querying the document.</p>
+      <code>>db.mycol.find({},{"title":1,_id:0}) <br>
+        {"title":"MongoDB Overview"} <br>
+        {"title":"NoSQL Overview"} <br>
+        {"title":"Tutorials Point Overview"} <br>
+        > </code>
+      <p>Please note _id field is always displayed while executing find() method, if you don't want this field, then you need to set it as 0.</p>
+    </section>
+  </main>
+</body>
+
+</html>
